@@ -17,21 +17,48 @@ while(true){
 		$response = "";
 
 		if ($item != "") {
-			$sql="SELECT name,image,materials from recipes where command_name='$item'";
+
+			$sql="SELECT name,image,materials,gif from recipes where command_name='$item'";
 			
-			if ($result = $connessione->query($sql))
-			{
-				if($result->num_rows > 0)
-				{
+			if ($result = $connessione->query($sql)) {
+
+				if($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
 						$name = $row["name"]; 
 						$image = $row["image"]; 
 						$materials = $row["materials"];
+						$gif = $row["gif"];
 					}
 
+					if($gif == 1) {
+						$response = $client->sendVideo([                 
+							'chat_id' => $chatId,                  
+							'video' => $image,                 
+							'caption' => 'Name: ' . $name . "\n" . 'Materials: ' . $materials               
+						]);
+					}
+
+					else {
+						$response = $client->sendPhoto([                 
+							'chat_id' => $chatId,                  
+							'photo' => $image,                 
+							'caption' => 'Name: ' . $name . "\n" . 'Materials: ' . $materials               
+						]);
+					}
+						
+				}
+
+				else if ($item == "/start") {
 					$response = $client->sendMessage([
 						'chat_id' => $chatId,
-						'text' => $image . "\n" . 'Nome: ' . $name . "\n" . 'Materiali: ' . $materials
+						'text' => 'Benvenuto nel mondo di Minecraft! ⛏💎 '."\n".'Scrivi il nome dell item di cui vuoi sapere la ricetta'
+					]);
+				}
+
+				else if ($item == "/help") {
+					$response = $client->sendMessage([
+						'chat_id' => $chatId,
+						'text' => 'Inserisci il nome di un item senza "/" e con "_" se sono più parole' . "\n" . 'Es: "crafting_table"'
 					]);
 				}
 
@@ -42,14 +69,15 @@ while(true){
 					]);
 				}
 			}
+		}
 
-			else {
-				$response = $client->sendMessage([
-					'chat_id' => $chatId,
-					'text' => 'Ricetta non trovata per questo item'
-				]);
-			}
-		}			
-	}
+		else if ($item == ""){
+			$response = $client->sendMessage([
+				'chat_id' => $chatId,
+				'text' => ''
+			]);
+		}
+	}		
 }
+
 ?>

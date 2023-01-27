@@ -51,7 +51,14 @@ while(true){
 				else if ($item == "/start") {
 					$response = $client->sendMessage([
 						'chat_id' => $chatId,
-						'text' => 'Benvenuto nel mondo di Minecraft! ⛏💎 '."\n".'Scrivi il nome dell item di cui vuoi sapere la ricetta'
+						'text' => 'Benvenuto nel mondo di Minecraft! ⛏💎 '."\n".'Scrivi il nome dell item di cui vuoi sapere la ricetta' . "\n" . '/help' . "\n" . '/recipes'
+					]);
+				}
+
+				else if ($item == "/recipes") {
+					$response = $client->sendMessage([
+						'chat_id' => $chatId,
+						'text' => 'Esempi ricette: ' . "\n" . 'wood_planks' . "\n" . 'crafting_table' . "\n" . 'sticks' . "\n" . 'furnace' . "\n" . 'sword'
 					]);
 				}
 
